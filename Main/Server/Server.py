@@ -3,6 +3,7 @@ from colorama import Fore
 from flask import Flask, request
 from pathlib import Path
 import json
+import socket
 
 app = Flask(__name__)
 bc = [
@@ -21,6 +22,7 @@ gc = [
     "琴", "莫娜", "刻晴", "七七", "迪卢克", "提纳里", "迪希雅", "天空之翼", "天空之卷", "天空之脊", "天空之傲",
     "天空之刃", "阿莫斯之弓", "四风原典", "和璞鸢", "狼的末路", "风鹰剑"
 ]
+local_ip = socket.gethostbyname(socket.gethostname())
 
 
 @app.route('/')
@@ -56,6 +58,8 @@ def wish():
     if everyone_path.exists():
         contents = everyone_path.read_text()
         everyone_dict = json.loads(contents)
+        if ip not in everyone_dict.keys():
+            everyone_dict[ip] = []
     else:
         everyone_dict = {ip: []}
         contents = json.dumps(everyone_dict,
@@ -153,4 +157,4 @@ def quit():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host=local_ip, port=5000)
