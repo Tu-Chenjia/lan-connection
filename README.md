@@ -1,39 +1,39 @@
 # 局域网联机
 
 #### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+
 
 #### 软件架构
-软件架构说明
+基于`Python`的客户端/服务器模式 (Client-server pattern)
+
+本产品遵循`客户端/服务器模式`，即使用客户端和服务器实现局域网内的通信。本品适用于学校的信息技术课使用。由于我校机房课前会开网，所以制作本品用于摸鱼(bushi)
 
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  在目标电脑上安装Python
+2.  运行`依赖.bat`
+3.  先运行Server服务端，再运行Client客户端
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+##### 服务端
 
-#### 参与贡献
+1.  安装完所有需要的依赖后，双击运行Server
+2.  将服务器在局域网中的ip地址提供给Client端
+3.  喝咖啡
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+##### 客户端
 
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+1.  安装完所有需要的依赖后，双击运行Client
+2.  看到`请输入服务器ip(不知道可以留空) >>> `时即可输入服务器ip
+ > 据说在机房里的电脑具有一个特点：
+ > 
+ > 如果服务器电脑是37号电脑，那你只要把客户端ip的最后两个数字改成37可能就可以了。
+ > 
+ > 比如：
+ > 
+ > 你的ip是 192.168.50.20，服务器在37号电脑上，那么你的服务器ip直接输入 192.168.50.37 即可
+ > 
+ > 大部分情况适用
+3.  抽卡吧。你的欧气会被他人发现！！！~~Just Do It!~~

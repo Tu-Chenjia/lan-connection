@@ -1,11 +1,19 @@
+# version = 0.0.3
+
 import random
 from colorama import Fore
 from flask import Flask, request
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from pathlib import Path
 import json
 import socket
 
 app = Flask(__name__)
+limiter = Limiter(app=app, key_func=get_remote_address, default_limits=[
+    "30 per minute", "1/seconds"]
+)
+
 bc = [
     "冷刃", "黎明神剑", "飞天御剑", "铁影阔剑", "沐浴龙血的剑", "以理服人", "黑缨枪", "魔导绪论", "讨龙英杰谭",
     "翡玉法球", "鸦羽弓", "神射手之誓", "弹弓"
@@ -25,9 +33,15 @@ gc = [
 local_ip = socket.gethostbyname(socket.gethostname())
 
 
+def message(status, code, content):
+    a = {'status': status, 'code': code, 'message': content}
+    return a
+
+
+@limiter.exempt
 @app.route('/')
 def index():
-    return 'Connected Successfully! It\'s a Wish program.'
+    return 'Connected Successfully! It\'s a Wish program.', 200
 
 
 @app.route('/wish', methods=['GET', 'POST'])
@@ -40,13 +54,7 @@ def wish():
         contents = path.read_text()
         dictionary = json.loads(contents)
     else:
-        dictionary = {
-            'ip': ip,
-            'history': [],
-            'gold': 0,
-            'purple': 0,
-            'paid': []
-        }
+        dictionary = {'ip': ip, 'gold': 0, 'purple': 0, 'paid': []}
         contents = json.dumps(dictionary,
                               sort_keys=True,
                               indent=4,
@@ -106,7 +114,6 @@ def wish():
 
     for i in range(int(times)):
         DrawCards()
-        dictionary['history'].append(result)
         dictionary['gold'] = result["g"] = Varg
         dictionary['purple'] = result["p"] = Varp
         contents = json.dumps(dictionary,
@@ -114,14 +121,15 @@ def wish():
                               indent=4,
                               separators=(',', ':'))
         path.write_text(contents)
-    return result
+    return message('success', 201, result), 201
 
 
+@limiter.exempt
 @app.route('/talk', methods=['GET', 'POST'])
 def talk():
     print(Fore.GREEN + request.form.get('ip') + ': ' +
           request.form.get('content') + Fore.RESET)
-    return 'OK'
+    return message('success', 200, 'Server gets the message.'), 200
 
 
 @app.route('/list', methods=['GET', 'POST'])
@@ -132,28 +140,27 @@ def LuckyList():
         contents = everyone_path.read_text()
         everyone_dict = json.loads(contents)
     else:
-        return {'notice': 'No one wished.'}
-    return everyone_dict
+        return message('error', 404, 'No one wished!'), 404
+    return message('success', 200, everyone_dict), 200
 
 
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
     ip = request.form.get('ip')
     path = Path('./Data/%s.json' % (ip))
-    dictionary = {'ip': ip, 'history': [], 'gold': 0, 'purple': 0, 'paid': []}
+    dictionary = {'ip': ip, 'gold': 0, 'purple': 0, 'paid': []}
     contents = json.dumps(dictionary,
                           sort_keys=True,
                           indent=4,
                           separators=(',', ':'))
     path.write_text(contents)
-    return 'ok'
+    return message('success', 200, 'Reset successfully!'), 200
 
 
 @app.route('/quit', methods=['GET', 'POST'])
 def quit():
-    ip = request.form.get('ip')
     print(Fore.YELLOW + request.form.get('ip') + '断开了连接' + Fore.RESET)
-    return 'ok'
+    return message('success', 200, 'Quit successfully!'), 200
 
 
 if __name__ == '__main__':
