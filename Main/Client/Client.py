@@ -1,4 +1,4 @@
-# version = 0.0.3
+# version = 0.0.5
 
 try:
     import socket
@@ -49,7 +49,7 @@ try:
 except requests.exceptions.Timeout:
     log('warning', '服务器响应超时，可能是因为服务器未启动或防火墙设置')
     exit()
-log('normal', '连接成功')
+log('server', '连接成功')
 log('server', response.text)
 log('normal', '现在你可以进行如下操作：')
 while True:

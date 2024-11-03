@@ -1,8 +1,8 @@
-# version = 0.0.3
+# version = 0.0.5
 
 import random
 from colorama import Fore
-from flask import Flask, request
+from flask import Flask, request, render_template, url_for
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from pathlib import Path
@@ -41,7 +41,33 @@ def message(status, code, content):
 @limiter.exempt
 @app.route('/')
 def index():
-    return 'Connected Successfully! It\'s a Wish program.', 200
+    return 'Connected Successfully! 现在你可以通过访问 http://%s:5000/index 来实现课堂摸鱼（可以看视频）' % (local_ip), 200
+
+
+@limiter.exempt
+@app.route('/index')
+def show():
+    return render_template("index.html")
+
+
+@limiter.exempt
+@app.route('/404.html')
+def error():
+    return render_template("404.html")
+
+
+@limiter.exempt
+@app.route('/help.html')
+def help_():
+    return render_template("help.html")
+
+
+@limiter.exempt
+@app.route('/video')
+def video_JiYan():
+    if request.method == 'GET':
+        videoname = request.args.get('name')
+    return render_template('main.html', movie='static/videos/%s.mp4' % (videoname))
 
 
 @app.route('/wish', methods=['GET', 'POST'])
